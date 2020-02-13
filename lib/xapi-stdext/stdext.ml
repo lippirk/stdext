@@ -21,5 +21,11 @@ module Semaphore = Xapi_stdext_threads.Semaphore
 module Unixext = Xapi_stdext_unix.Unixext
 module Zerocheck = Xapi_stdext_zerocheck.Zerocheck
 
+module Const : sig
+  val good_ciphersuites : string
+end = struct
+  let good_ciphersuites = "!SSLv2:!EXPORT:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-GCM-SHA384:AES256-SHA256:AES128-SHA256:-MD5:-SSLv3:-RC4"
+end
+
 (* To depracate asap *)
 module Fun = Xapi_stdext_deprecated.Fun
