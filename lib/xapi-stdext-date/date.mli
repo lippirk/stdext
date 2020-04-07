@@ -47,3 +47,5 @@ val rfc822_of_float : float -> rfc822
 
 (** Convert RFC 822 date/time to a formatted string. *)
 val rfc822_to_string : rfc822 -> string
+
+val eq : iso8601 -> iso8601 -> bool
