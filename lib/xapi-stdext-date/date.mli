@@ -24,7 +24,8 @@ val of_float : float -> iso8601
 (** Convert date/time to a float value: the number of seconds since 00:00:00 UTC, 1 Jan 1970. *)
 val to_float : iso8601 -> float
 
-(** Convert date/time to an ISO 8601 formatted string. *)
+(** Convert date/time to an ISO 8601 formatted string.
+  * Does not accept a timezone annotated datetime *)
 val to_string : iso8601 -> string
 
 (** Convert ISO 8601 formatted string to a date/time value. *)
@@ -33,6 +34,7 @@ val of_string : string -> iso8601
 (** Raises an Invalid_argument exception if the given date is not a UTC date.
  *  A UTC date is an ISO 8601 strings that ends with the character 'Z'. *)
 val assert_utc : iso8601 -> unit
+[@@deprecated "assertions performed inside constructors, so this fn does nothing"]
 
 (** Representation of the concept "never" (actually 00:00:00 UTC, 1 Jan 1970). *)
 val never: iso8601

@@ -522,9 +522,6 @@ module Date = struct
   let check_float_neq = Alcotest.(check @@ neg @@ float 1e-2)
   let check_string = Alcotest.(check string)
   let check_true str = Alcotest.(check bool) str true
-  let check_false str = Alcotest.(check bool) str false
-  let of_string x = x |> of_string |> fun x -> assert_utc x; x
-  let of_float x = x |> of_float |> fun x -> assert_utc x; x
 
   let iso8601_tests =
     let test_of_float_invertible () =
@@ -540,14 +537,12 @@ module Date = struct
       check_true "of_string inverts to_string" (eq (time |> of_string) (time |> of_string |> to_string |> of_string));
     in
 
-    let test_timezones () =
-      let t = "2020-12-20T18:10:19Z" in
-      let t_plus_2h = "2020-12-20T18:10:19+02:00" in
-      test_of_string_invertible t ();
-      test_of_string_invertible t_plus_2h ();
-      check_float "timezone ignored when converting to float"
-                  (t |> of_string |> to_float)
-                  (t_plus_2h |> of_string |> to_float)
+    let test_only_utc () =
+      let utc = "2020-12-20T18:10:19Z" in
+      let _ = of_string utc in (* UTC is valid *)
+      let non_utc = "2020-12-20T18:10:19+02:00" in
+      let exn = Invalid_argument "date.ml:of_string: 2020-12-20T18:10:19+02:00" in
+      Alcotest.check_raises "only UTC is accepted" exn (fun () ->  of_string non_utc |> ignore)
     in
 
     let test_ca333908 () =
@@ -561,7 +556,7 @@ module Date = struct
     in
 
     [ "test_of_float_invertible", `Quick, test_of_float_invertible
-    ; "test_timezones", `Quick, test_timezones
+    ; "test_only_utc", `Quick, test_only_utc
     ; "test_ca333908", `Quick, test_ca333908
     ]
 
